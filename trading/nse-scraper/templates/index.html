@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask Dynamic Dropdown</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+    <h1>Select Options</h1>
+    <form id="trackerSymbolsDropdownForm">
+        <select id="trackerSymbolsDropdown" name="tracker_symbol">
+            <option value="">Select Option</option>
+            {% for option in options %}
+            <option value="{{ option }}">{{ option }}</option>
+            {% endfor %}
+        </select>
+        <select id="finInstrTpDropdown" name="fin_instr_tp">
+            <option value="">Select Option</option>
+            <option value="STO">STO</option>
+            <option value="STF">STF</option>
+        </select>
+    </form>
+    <h2>Details</h2>
+    <form id="dropdown3Form">
+        <select id="dropdown3" name="dropdown3">
+            <option value="">Select Option 3</option>
+        </select>
+    </form>
+    <table id="dataTable" border="groove">
+        <thead>
+            <!-- Data will be populated here -->
+        </thead>
+        <tbody>
+            <!-- Data will be populated here -->
+        </tbody>
+    </table>
+    <script>
+        $(document).ready(function () {
+            console.log("entering111111111111111")
+            $('#trackerSymbolsDropdown, #finInstrTpDropdown').change(function () {
+                console.log("entering22222222222222222222222")
+                const trackerSymbol = $('#trackerSymbolsDropdown').val();
+                const finInstrTp = $('#finInstrTpDropdown').val();
+                if (trackerSymbol && finInstrTp) {
+                    console.log("entering33333333333333333333333333")
+                    $.ajax({
+                        type: 'POST',
+                        url: '/get_instrns_end_dates',
+                        data: $('#trackerSymbolsDropdownForm').serialize(),
+                        success: function (response) {
+                            console.log("entering44444444444444444444444444444444444444")
+                            $('#dropdown3').empty().append('<option value="">Select Option 3</option>');
+                            $('#dataTable tbody').empty()
+                            $.each(response, function (index, item) {
+                                $('#dropdown3').append('<option value="' + item + '">' + item + '</option>');
+                            });
+                        }
+                    });
+                }
+            });
+
+            $('#dropdown3').change(function () {
+                var value3 = $('#dropdown3').val();
+                const trackerSymbol = $('#trackerSymbolsDropdown').val();
+                const finInstrTp = $('#finInstrTpDropdown').val();
+
+                if (value3) {
+                    // Dropdown3 has a value selected
+                    $.ajax({
+                        url: '/get_instrn_data', // Replace with your API endpoint
+                        method: 'POST',
+                        data: {
+                            instrns_end_date: value3,
+                            tracker_symbol: trackerSymbol,
+                            fin_instr_tp: finInstrTp
+                        },
+                        success: function (response) {
+                            console.log("entering555555555555555555555555555555")
+                            // Assuming response is an array of objects for table rows
+                            // { "trade_date": "2024-05-31", "fin_instrm_nm": "RELIANCE24AUGFUT", "xpry_date": "2024-08-29", "opn_intrst_lot": 28.0, "chng_in_opn_intrst_lot": 28.0 }
+                            var tableBody = $('#dataTable tbody');
+                            tableBody.empty();
+                            var tableHead = $('#dataTable thead')
+                            tableHead.empty();
+                            if (finInstrTp == 'STO') {
+                                tableHead.append('<tr>' +
+                                    '<th>trade_date</th>' +
+                                    '<th>start_date</th>' +
+                                    '<th>fin_instrm_nm</th>' +
+                                    '<th>opn_intrst_lot</th>' +
+                                    '<th>chng_in_opn_intrst_lot</th>' +
+                                    '</tr>')
+                            }
+                            if (finInstrTp == 'STF') {
+                                tableHead.append('<tr>' +
+                                    '<th>trade_date</th>' +
+                                    '<th>start_date</th>' +
+                                    ' <th>fin_instrm_nm</th>' +
+                                    '<th>opn_intrst_lot</th>' +
+                                    '<th>chng_in_opn_intrst_lot</th>' +
+                                    '</tr>')
+                            }
+
+                            $.each(JSON.parse(response), function (index, item) {
+                                console.log("entering66666666666666666666666666666")
+
+                                var row = '<tr>' +
+                                    '<td>' + item.trade_date + '</td>' +
+                                    '<td>' + item.start_date + '</td>' +
+                                    '<td>' + item.fin_instrm_nm + '</td>' +
+                                    '<td>' + item.opn_intrst_lot + '</td>' +
+                                    '<td>' + item.chng_in_opn_intrst_lot + '</td>' +
+                                    '</tr>';
+                                tableBody.append(row);
+                            });
+                        }
+                    });
+                }
+            });
+
+
+        });
+    </script>
+</body>
+
+</html>

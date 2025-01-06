@@ -1,0 +1,71 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Market Data Feed</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+    <script src="index.js" defer></script>
+</head>
+
+<body>
+    <div class="navbar">
+        <div>Hi, Rajesh</div>
+        <div class="navbar-links">
+            <a href="#">Dashboard</a>
+            <a href="#">Settings</a>
+        </div>
+        <button class="logout">Logout</button>
+    </div>
+    <div class="container">
+        Instrument cards
+        <div class="card" id="instrument1"></div>
+        <div class="card" id="instrument2"></div>
+        <div class="card" id="instrument3"></div>
+        <div class="card" id="instrument4"></div>
+        <div class="card" id="instrument5"></div>
+    </div>
+</body>
+
+</html> -->
+
+<!doctype html>
+<html>
+
+<head>
+    <title>Socket.IO Demo</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Market Data Feed</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script> -->
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+
+    <script src="index.js" defer></script>
+</head>
+
+<body>
+    <h1>Socket.IO Demo</h1>
+    <div>
+        <label><input type="checkbox" id="feed1" value="35005"> NIFTY</label>
+        <label><input type="checkbox" id="feed2" value="35025"> BANKNIFTY</label>
+        <label><input type="checkbox" id="feed3" value="35426"> FINNIFTY</label>
+        <label><input type="checkbox" id="feed4" value="35004"> MIDCPNIFTY</label>
+        <label><input type="checkbox" id="feed5" value="1146913"> SENSEX</label>
+    </div>
+    <button onclick="subscribe()">Subscribe</button>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.min.js"></script>
+
+    <div class="container">
+        <!-- Instrument cards -->
+        <div id="instrument1" class="card"></div>
+        <div id="instrument2" class="card"></div>
+        <div id="instrument3" class="card"></div>
+        <div id="instrument4" class="card"></div>
+        <div id="instrument5" class="card"></div>
+    </div>
+</body>
+
+</html>

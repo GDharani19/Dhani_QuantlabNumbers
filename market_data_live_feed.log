@@ -1,0 +1,52 @@
+2024-12-21 22:29:52,346 - asyncio - ERROR - Task exception was never retrieved
+future: <Task finished name='Task-58' coro=<BaseRunner.cleanup() done, defined at C:\Users\gotta\AppData\Local\Programs\Python\Python312\Lib\site-packages\aiohttp\web_runner.py:295> exception=KeyboardInterrupt()>
+Traceback (most recent call last):
+  File "c:\Users\gotta\Downloads\trading.tar 1\trading\nse-scraper\dhan_server.py", line 207, in <module>
+    loop.run_until_complete(runner.cleanup())
+  File "C:\Users\gotta\AppData\Roaming\Python\Python312\site-packages\nest_asyncio.py", line 92, in run_until_complete
+    self._run_once()
+  File "C:\Users\gotta\AppData\Roaming\Python\Python312\site-packages\nest_asyncio.py", line 133, in _run_once
+    handle._run()
+  File "C:\Users\gotta\AppData\Local\Programs\Python\Python312\Lib\asyncio\events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "C:\Users\gotta\AppData\Local\Programs\Python\Python312\Lib\asyncio\tasks.py", line 303, in __step
+    self.__step_run_and_handle_result(exc)
+  File "C:\Users\gotta\AppData\Local\Programs\Python\Python312\Lib\asyncio\tasks.py", line 314, in __step_run_and_handle_result
+    result = coro.send(None)
+             ^^^^^^^^^^^^^^^
+  File "C:\Users\gotta\AppData\Local\Programs\Python\Python312\Lib\site-packages\aiohttp\web_runner.py", line 310, in cleanup
+    await self._cleanup_server()
+  File "C:\Users\gotta\AppData\Local\Programs\Python\Python312\Lib\site-packages\aiohttp\web_runner.py", line 399, in _cleanup_server
+    await self._app.cleanup()
+  File "C:\Users\gotta\AppData\Local\Programs\Python\Python312\Lib\site-packages\aiohttp\web_app.py", line 487, in cleanup
+    await self.on_cleanup.send(self)
+  File "C:\Users\gotta\AppData\Local\Programs\Python\Python312\Lib\site-packages\aiosignal\__init__.py", line 36, in send
+    await receiver(*args, **kwargs)  # type: ignore
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\gotta\Downloads\trading.tar 1\trading\nse-scraper\dhan_server.py", line 178, in cleanup_background_tasks
+    await app['fetch_market_data']
+  File "C:\Users\gotta\AppData\Local\Programs\Python\Python312\Lib\asyncio\futures.py", line 292, in __await__
+    return self.result()  # May raise too.
+           ^^^^^^^^^^^^^
+  File "C:\Users\gotta\AppData\Local\Programs\Python\Python312\Lib\asyncio\futures.py", line 202, in result
+    raise self._exception.with_traceback(self._exception_tb)
+  File "C:\Users\gotta\AppData\Local\Programs\Python\Python312\Lib\asyncio\tasks.py", line 314, in __step_run_and_handle_result
+    result = coro.send(None)
+             ^^^^^^^^^^^^^^^
+  File "c:\Users\gotta\Downloads\trading.tar 1\trading\nse-scraper\dhan_server.py", line 138, in fetch_market_data
+    response = data.get_data()
+               ^^^^^^^^^^^^^^^
+  File "C:\Users\gotta\AppData\Local\Programs\Python\Python312\Lib\site-packages\dhanhq\marketfeed.py", line 57, in get_data
+    return self.loop.run_until_complete(self.get_instrument_data())
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gotta\AppData\Roaming\Python\Python312\site-packages\nest_asyncio.py", line 92, in run_until_complete
+    self._run_once()
+  File "C:\Users\gotta\AppData\Roaming\Python\Python312\site-packages\nest_asyncio.py", line 115, in _run_once
+    event_list = self._selector.select(timeout)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\gotta\AppData\Local\Programs\Python\Python312\Lib\asyncio\windows_events.py", line 445, in select
+    self._poll(timeout)
+  File "C:\Users\gotta\AppData\Local\Programs\Python\Python312\Lib\asyncio\windows_events.py", line 774, in _poll
+    status = _overlapped.GetQueuedCompletionStatus(self._iocp, ms)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt
