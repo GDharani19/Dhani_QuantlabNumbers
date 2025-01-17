@@ -31,6 +31,7 @@ from models.fo_combine_oi_delta_equivalent import FOCombineOIDeltaEquivalent
 from models.holidays import Holidays
 from constants import TABLES, mst_table_mapping, INDEX_FOR_ADOPTIVE_EMA_CALCULATION
 
+
 HOST = "0.0.0.0"
 PORT = 9009
 
@@ -384,27 +385,62 @@ def update_db():
     return make_response(jsonify({"message": "successful"}), 200)
 
 
+# @app.route('/get-db-last-update-date', methods=['POST'])
+# def get_db_last_update_date():
+#     data = request.get_json()
+#     table_name = data.get('table_name')
+#     if "secrete" not in data:
+#         return make_response(jsonify({"message": "Invalid Request"}), 400)
+#     if data["secrete"] != settings.SECRET_KEY:
+#         return make_response(jsonify({"message": "Invalid Request"}), 400)
+#     if table_name and table_name not in mst_table_mapping:
+#         return make_response(jsonify({"message": "Invalid Request"}), 400)
+#     with next(get_db()) as db_session:
+#         if not table_name:
+#             table_name = 'last_updated_date'
+#         date_column = mst_table_mapping[table_name]['date_column']
+#         last_updated = db_session.execute(
+#             text(f'select max(`{date_column}`) from {table_name}')).scalar()
+#         return make_response(jsonify(
+#             {
+#                 "last_update_date": last_updated.strftime('%Y-%m-%d') if last_updated else None
+#             }
+#         ), 200)
+
 @app.route('/get-db-last-update-date', methods=['POST'])
 def get_db_last_update_date():
     data = request.get_json()
-    table_name = data.get('table_name')
-    if "secrete" not in data:
-        return make_response(jsonify({"message": "Invalid Request"}), 400)
+
+    # Validate payload
+    if not data or "secrete" not in data:
+        return make_response(jsonify({"message": "Invalid Request: Missing 'secrete' key"}), 400)
+
     if data["secrete"] != settings.SECRET_KEY:
-        return make_response(jsonify({"message": "Invalid Request"}), 400)
-    if table_name and table_name not in mst_table_mapping:
-        return make_response(jsonify({"message": "Invalid Request"}), 400)
-    with next(get_db()) as db_session:
-        if not table_name:
-            table_name = 'last_updated_date'
-        date_column = mst_table_mapping[table_name]['date_column']
-        last_updated = db_session.execute(
-            text(f'select max(`{date_column}`) from {table_name}')).scalar()
-        return make_response(jsonify(
-            {
-                "last_update_date": last_updated.strftime('%Y-%m-%d') if last_updated else None
-            }
-        ), 200)
+        return make_response(jsonify({"message": "Invalid Request: Incorrect 'secrete' key"}), 400)
+
+    # Get table name and validate it
+    table_name = data.get('table_name', 'last_updated_date')
+    if table_name not in mst_table_mapping:
+        return make_response(jsonify({"message": f"Invalid Request: Unknown table '{table_name}'"}), 400)
+
+    try:
+        # Retrieve last update date
+        with next(get_db()) as db_session:
+            date_column = mst_table_mapping[table_name]['date_column']
+
+            # Safeguard for SQL Injection
+            query = text(f"SELECT MAX(`{date_column}`) FROM `{table_name}`")
+            last_updated = db_session.execute(query).scalar()
+
+            return make_response(jsonify(
+                {
+                    "last_update_date": last_updated.strftime('%Y-%m-%d') if last_updated else None
+                }
+            ), 200)
+    except Exception as e:
+        # General error handling
+        return make_response(jsonify({"message": f"Server Error: {str(e)}"}), 500)
+
 
 
 @app.route('/get-report2', methods=['GET'])

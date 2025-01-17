@@ -28,6 +28,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from constants import mst_table_mapping, tables_to_get
 from analyze_trade_quantity_with_rs import main as all_data_csv_main
+from analyze_trade_quantity_with_rs import main as synthetic_generator_data_report
 
 root_dir = os.getcwd()
 temp_folder = root_dir+'/temp'
@@ -39,10 +40,12 @@ BASE_URL = "https://www.nseindia.com/api"
 ARCHIVE_URL = "https://archives.nseindia.com"
 NEW_ARCHIVE_URL = "https://nsearchives.nseindia.com"
 
+# import pdb; pdb.set_trace()
+
 referer_list = [
     # "https://www.nseindia.com/get-quotes/equity?symbol=HDFCBANK",
     "https://www.nseindia.com/all-reports"
-]
+    ]
 
 headers = [
     {
@@ -1045,21 +1048,37 @@ if __name__ == "__main__":
                 data = x.download_data(table_name, data_date)
                 print("file_name:", data)
                 if table_name == 'cm_udiff_bhavdata':
+                    start_time = time.time()
                     x.add_equity_udiff_bhavcopy_to_db(data)
+                    end_time = time.time()
                 elif table_name == 'securities_bhavdata':
+                    start_time = time.time()
                     x.add_securities_bhavdata_to_db(data)
+                    end_time = time.time()
                 elif table_name == 'equity_blocks':
+                    start_time = time.time()
                     x.add_equity_block_to_db(data)
+                    end_time = time.time()
                 elif table_name == 'equity_bulks':
+                    start_time = time.time()
                     x.add_equity_bulk_to_db(data)
+                    end_time = time.time()
                 elif table_name == 'fo_udiff_bhavdata':
+                    start_time = time.time()
                     x.add_fo_udiff_bhavcopy_to_db(data)
+                    end_time = time.time()
                 elif table_name == 'fo_combine_oi_delta_equivalent':
+                    start_time = time.time()
                     x.add_fo_combine_oi_delta_eq_to_db(data, data_date)
+                    end_time = time.time()
                 elif table_name == 'cm_market_data_indexes':
+                    start_time = time.time()
                     x.add_cm_market_data_to_db(data)
+                    end_time = time.time()
                 elif table_name == 'cm_index_data':
+                    start_time = time.time()
                     x.add_cm_index_data_to_db(data)
+                    end_time = time.time()
 
             except Exception as e:
                 print(e)
@@ -1094,6 +1113,8 @@ if __name__ == "__main__":
         send_email(f"NSE data sync: {datetime.now().strftime('%Y-%m-%d')}", body_str,
                    ['gottamdharani7626@gmail.com'])
 # 'bhargav.m@pagesolutions.co.uk', 'kpdasari@gmail.com',
+
+
     print('All data csv report uploading started')
 
     for data_date in get_dates('all_data_csv_report'):
@@ -1105,15 +1126,15 @@ if __name__ == "__main__":
     
     
     
-    print('Synthetic generator data report uploading started')
+    # print('Synthetic generator data report uploading started')
 
-    for data_date in get_dates('synthetic_generator_data_report'):
-        try:
-            synthetic_generator_data_report(data_date, upload_to_remote_server=True)
-        except Exception as e:
-            print(e)
+    # for data_date in get_dates('synthetic_generator_data_report'):
+    #     try:
+    #         synthetic_generator_data_report(data_date, upload_to_remote_server=True)
+    #     except Exception as e:
+    #         print(e)
 
-    print('Synthetic generator data report uploading finished')
+    # print('Synthetic generator data report uploading finished')
 
     
     

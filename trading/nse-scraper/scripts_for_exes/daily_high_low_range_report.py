@@ -10,7 +10,8 @@ if not directory_path.exists():
     # Create the directory if it doesn't exist
     directory_path.mkdir(parents=True)
 
-API_URL = "https://intranet.cytrion.com/trading-api"
+# API_URL = "https://intranet.cytrion.com/trading-api"
+API_URL = "http://127.0.0.1:9009"
 
 if __name__ == "__main__":
     report_url = f"{API_URL}/get-report7"

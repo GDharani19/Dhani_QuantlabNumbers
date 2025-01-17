@@ -295,4 +295,4 @@ def load_synthetic_check_data_to_db(start: str, end: str):
 
 
 if __name__ == '__main__':
-    load_synthetic_check_data_to_db(start='2024-01-01', end='2024-12-30')
+    load_synthetic_check_data_to_db(start='2024-01-01', end='2025-12-31')

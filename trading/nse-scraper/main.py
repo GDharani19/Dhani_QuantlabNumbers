@@ -1780,6 +1780,8 @@ def get_dates(table_name):
 #     )
 #     dates = dates[~dates.isin(holidays)]
 #     return dates
+
+
 def get_dates(table_name):
     # Query for holidays
     holidays_query = """
@@ -1791,7 +1793,7 @@ def get_dates(table_name):
         text(holidays_query),
         engine, parse_dates=['trading_date']
     )
-    holidays = holidays_data.trading_date.dropna()
+    holidays = holidays_data.trading_date
 
     date_column = mst_table_mapping[table_name]['date_column']
     with next(get_db()) as db_session:

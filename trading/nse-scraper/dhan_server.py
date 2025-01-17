@@ -227,6 +227,7 @@ import logging
 import os
 import ssl
 import aiohttp
+import asyncio
 
 # Apply the nest_asyncio patch
 nest_asyncio.apply()
@@ -321,42 +322,75 @@ async def fetch_market_data():
     ssl_context.check_hostname = False
     ssl_context.verify_mode = ssl.CERT_NONE
 
-    async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=ssl_context)) as session:
-        while True:
-            try:
+    # async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=ssl_context)) as session:
+    #     while True:
+    #         try:
+    #             inst = get_instruments()
+    #             data = marketfeed.DhanFeed(client_id, access_token, inst, version)
+    #             await data.connect()
+    #             while True:
+    #                 data.run_forever()
+    #                 response = data.get_data()
+    #                 print(response)
+    #                 if response.get('type') == 'Full Data':
+    #                     save_to_db(response)
+    #                     await emit_filtered_data(process_data(response))
+    #                 await asyncio.sleep(1)  # Periodic task every second
+    #         except websockets.exceptions.ConnectionClosedError as e:
+    #             logging.error(f"WebSocket connection closed: {e}")
+    #             traceback.print_exc()
+    #             await asyncio.sleep(5)  # Wait before retrying
+    #             continue
+
+    #         except ssl.SSLError as e:
+    #             logging.error(f"SSL error occurred: {e}")
+    #             traceback.print_exc()
+    #             await asyncio.sleep(1)  # Wait before retrying
+    #             continue
+
+    #         except asyncio.CancelledError:
+    #             logging.info("Task was cancelled, shutting down gracefully.")
+    #             await data.disconnect()
+    #             break
+
+    #         except Exception as e:
+    #             logging.error(f"Error fetching market data: {e}")
+    #             traceback.print_exc()
+    #             await asyncio.sleep(5)  # Wait before retrying
+    #             await data.disconnect()
+    
+
+
+async def main():
+    ssl_context = ssl.create_default_context()
+    ssl_context.check_hostname = False  # Disable hostname checking
+    ssl_context.verify_mode = ssl.CERT_NONE  # Disable SSL verification
+
+    connector = aiohttp.TCPConnector(ssl=ssl_context)
+
+    while True:
+        try:
+            async with aiohttp.ClientSession(connector=connector) as session:
                 inst = get_instruments()
                 data = marketfeed.DhanFeed(client_id, access_token, inst, version)
+                
                 await data.connect()
                 while True:
-                    data.run_forever()
                     response = data.get_data()
-                    print(response)
-                    if response.get('type') == 'Full Data':
-                        save_to_db(response)
-                        await emit_filtered_data(process_data(response))
+                    if response:
+                        print(response)
+                        if response.get('type') == 'Full Data':
+                            save_to_db(response)
+                            await emit_filtered_data(process_data(response))
                     await asyncio.sleep(1)  # Periodic task every second
-            except websockets.exceptions.ConnectionClosedError as e:
-                logging.error(f"WebSocket connection closed: {e}")
-                traceback.print_exc()
-                await asyncio.sleep(5)  # Wait before retrying
-                continue
+        except (websockets.exceptions.ConnectionClosedError, aiohttp.ClientConnectorError, ssl.SSLError) as e:
+            logging.error(f"Connection issue: {e}")
+            traceback.print_exc()
+            await asyncio.sleep(5)  # Wait before retrying
 
-            except ssl.SSLError as e:
-                logging.error(f"SSL error occurred: {e}")
-                traceback.print_exc()
-                await asyncio.sleep(1)  # Wait before retrying
-                continue
+# Run the main function
+asyncio.run(main())
 
-            except asyncio.CancelledError:
-                logging.info("Task was cancelled, shutting down gracefully.")
-                await data.disconnect()
-                break
-
-            except Exception as e:
-                logging.error(f"Error fetching market data: {e}")
-                traceback.print_exc()
-                await asyncio.sleep(5)  # Wait before retrying
-                await data.disconnect()
 
 async def start_background_tasks(app):
     app['fetch_market_data'] = asyncio.create_task(fetch_market_data())

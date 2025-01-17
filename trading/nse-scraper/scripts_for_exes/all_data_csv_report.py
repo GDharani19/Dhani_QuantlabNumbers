@@ -12,7 +12,8 @@ if not directory_path.exists():
     directory_path.mkdir(parents=True)
     # print(f"Directory '{directory_path}' created.")
 
-API_URL = "https://intranet.cytrion.com/trading-api"
+# API_URL = "https://intranet.cytrion.com/trading-api"
+API_URL = "http://127.0.0.1:9009"
 
 if __name__ == "__main__":
     report_url = f"{API_URL}/get-all-data-csv-report"

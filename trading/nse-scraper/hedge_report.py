@@ -122,7 +122,7 @@ def next_thursday(given_date):
     if days_until_thursday == 0:
         days_until_thursday = 7
     # Calculate the next Thursday
-    next_thursday_date = given_date + timedelta(days=days_until_thursday)
+    next_thursday_date = given_date + timedelta(days=days_until_thursday)    
     return next_thursday_date
 
 

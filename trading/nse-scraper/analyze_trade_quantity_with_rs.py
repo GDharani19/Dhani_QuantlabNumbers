@@ -292,10 +292,13 @@ def main(current_date: datetime, upload_to_remote_server=False):
     nifty_fo_data = get_fo_equity_symbols_list(current_date)
 
     nifty_500_data = get_nifty_500_symbols_list()
-
+    # import pdb;pdb.set_trace()
     rs_7_data = get_rs(past_26_active_dates, 7)
+    # print(rs_7_data)
     rs_14_data = get_rs(past_26_active_dates, 14)
+    # print(rs_14_data)
     vwap_7_data = get_vwap(past_26_active_dates, 7)
+    # print(vwap_7_data)
     vwap_14_data = get_vwap(past_26_active_dates, 14)
 
     current_data = get_eq_security_bhav_data(current_date)
