@@ -83,7 +83,7 @@ def get_futures_end_data(r_index, r_date):
 
 previous_close_price = {'NIFTY': None, 'BANKNIFTY': None}
 week_numbers = {'NIFTY': {}, 'BANKNIFTY': {}}
-week_dates = pd.date_range(start='2024-01-01', end='2024-12-30', freq='B')
+week_dates = pd.date_range(start='2024-01-01', end='2025-12-30', freq='B')
 
 x = 0
 y = 0
@@ -136,10 +136,11 @@ def get_report_data(r_date, r_index):
 
         options_bhav_data = pd.read_sql(
             text(f"""
-    select fin_instrm_tp,close_price,tckr_symb,undrlyg_price as 'Spot Cls', strk_price, prev_closing_price,  DATE_FORMAT(xpry_date, '%Y-%m-%d') as xpry_date  from fo_udiff_bhavdata where trade_date = '{r_date.strftime('%Y-%m-%d')}' and xpry_date = '{options_end_date}'and fin_instrm_tp in ('IDO') and tckr_symb = '{r_index}'
+    select fin_instrm_tp,close_price,tckr_symb,undrlyg_price as 'Spot Cls', strk_price, prev_closing_price,  
+    DATE_FORMAT(xpry_date, '%Y-%m-%d') as xpry_date  from fo_udiff_bhavdata where trade_date = '{r_date.strftime('%Y-%m-%d')}' 
+    and xpry_date = '{options_end_date}'and fin_instrm_tp in ('IDO') and tckr_symb = '{r_index}'
     """), engine)
-        print(
-            '1111111111111111111111111111111111111111111111111111111111111111111111111111')
+        print('1111111111111111111111111111111111111111111111111111111111111111111111111111')
 
         print(options_bhav_data)
         options_bhav_data['diff_from_fut'] = fut_close_price - \

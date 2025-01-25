@@ -14,7 +14,7 @@ const Login = ( { setAuth }) => {
     event.preventDefault();
     setError('');
     try {
-      const response = await axios.post('https://intranet.cytrion.com/trading-api/login', {
+      const response = await axios.post('http://127.0.0.1:9009/login', {
         email,
         password
       });

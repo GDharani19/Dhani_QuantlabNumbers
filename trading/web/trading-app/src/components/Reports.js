@@ -51,7 +51,7 @@ const Reports = () => {
 	   setIsLoading(true);
     try {
  	const data = {"ticker_symbol": filter1, "instrument_type": filter4,"expiry_date":filter2,"percentage_active": filter3} 
-      const response = await axios.post('https://intranet.cytrion.com/trading-api/get-instruments-data',data);
+      const response = await axios.post('http://127.0.0.1:9009/get-instruments-data',data);
       setData(response.data);
       if (response.data && response.data.length > 0) {
         const columnHeaders = Object.keys(response.data[0]).map(key => ({

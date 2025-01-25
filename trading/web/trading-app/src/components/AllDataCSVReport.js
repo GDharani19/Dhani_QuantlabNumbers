@@ -60,7 +60,7 @@ const AllDataCSVReport = () => {
 	  setData([]);
 	  setIsLoading(true);
     try {
-      const response = await axios.get('https://intranet.cytrion.com/trading-api/get-all-data-csv-report',{
+      const response = await axios.get('http://127.0.0.1:9009/get-all-data-csv-report',{
   params: {
 	  date: filter1 ? dayjs(filter1).format("YYYY-MM-DD") : ''
   }});

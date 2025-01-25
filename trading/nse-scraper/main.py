@@ -876,7 +876,6 @@
 
 
 import copy
-
 import numpy as np
 from requests import Session, ReadTimeout
 from requests.exceptions import ConnectionError

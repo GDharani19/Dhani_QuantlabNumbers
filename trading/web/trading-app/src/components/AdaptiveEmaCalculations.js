@@ -57,7 +57,7 @@ const AdaptiveEmaCalculations = () => {
 	  setData([]);
 	  setIsLoading(true);
     try {
-        const response = await axios.get('https://intranet.cytrion.com/trading-api/get-report4',{
+        const response = await axios.get('http://127.0.0.1:9009/get-report4',{
   params: {
           date: filter1 ? dayjs(filter1).format("YYYY-MM-DD") : ''
   }});

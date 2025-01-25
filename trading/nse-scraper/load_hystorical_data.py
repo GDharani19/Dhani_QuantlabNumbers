@@ -233,7 +233,7 @@ def add_historical_data_of_a_date(data_date: datetime):
 
 if __name__ == "__main__":
     # Generate business days only
-    dates = pd.date_range(start="2025-01-09", 
+    dates = pd.date_range(start="2025-01-19", 
                           end=datetime.now().strftime('%Y-%m-%d'), 
                           freq='B')  # freq='B' ensures no Sat/Sun
 

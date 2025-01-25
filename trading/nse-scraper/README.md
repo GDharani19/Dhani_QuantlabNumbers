@@ -110,4 +110,8 @@
 11. Run the following cmd to run the dhan live server.
     ```bash
     python -m dhan_server
+<<<<<<< HEAD
     ```
+=======
+    ```
+>>>>>>> 016c131 (Initial commit)

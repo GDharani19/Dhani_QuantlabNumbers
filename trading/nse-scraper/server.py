@@ -12,7 +12,7 @@ from config import settings
 from sqlalchemy import func, text
 
 from flask_sqlalchemy import SQLAlchemy
-# import talib
+import talib
 
 
 from db import engine, get_db
@@ -123,15 +123,9 @@ list_of_holidays = [
     '17-Jul-2024', '15-Aug-2024', '07-Sep-2024',
     '02-Oct-2024', '12-Oct-2024', '01-Nov-2024',
     '02-Nov-2024', '15-Nov-2024', '25-Dec-2024',
-    '26-Jan-2025',  
-    '17-Mar-2025',  
-    '11-Apr-2025',  
-    '14-Apr-2025',  
-    '01-May-2025',  
-    '15-Aug-2025',  
-    '02-Oct-2025',  
-    '21-Oct-2025',  
-    '31-Oct-2025',  
+    '26-Jan-2025', '17-Mar-2025', '11-Apr-2025',  
+    '14-Apr-2025', '01-May-2025', '15-Aug-2025',  
+    '02-Oct-2025', '21-Oct-2025', '31-Oct-2025',  
     '25-Dec-2025']   
 
 
@@ -888,7 +882,7 @@ def get_report3():
     #         mimetype='application/json', status=200)
 
 
-@app.route('/get-report4', methods=['GET'])
+@app.route('/get-report4', methods=['GET'])   # adaptive ema calculations
 def get_report4():
     # Define the benchmark index
     benchmark = 'Nifty 50'
@@ -1306,7 +1300,7 @@ def get_report5():
 
 @app.route('/get-report6', methods=['GET'])
 def get_report6():
-
+# monthly_high_low_range_report
     with next(get_db()) as db_session:
 
         current_start_date = db_session.execute(
@@ -1422,7 +1416,7 @@ select tckr_symb, company_name from ticker_info order by tckr_symb;
 
 @app.route('/get-report7', methods=['GET'])
 def get_report7():
-
+# daily_high_low_range_report
     with next(get_db()) as db_session:
         current_start_date = request.args.get('date', '')
         if current_start_date:
@@ -1719,7 +1713,7 @@ select * from all_data_csv_report where `date` = :data_date;
             lambda x: x.strftime('%Y-%m-%d') if x else x))
     return app.response_class(
         response='{"data":' +
-        result.to_json(orient="records", double_precision=6) +
+        result.to_json(orient="records", double_precision=6) + 
         ', "date": "' + last_updated + '"}',
         mimetype='application/json', status=200)
 
